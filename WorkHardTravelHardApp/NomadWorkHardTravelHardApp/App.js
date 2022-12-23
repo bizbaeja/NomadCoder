@@ -10,9 +10,23 @@ import { theme } from "./colors";
 import React, { useState } from "react";
 export default function App() {
   const [working, setWorking] = useState(false);
+  const [text, setText] = useState("");
+  const [toDos, setTodos] = useState({});
   const travel = () => setWorking(false);
   const work = () => setWorking(true);
-  const onChangeText = (event) => console.log(event);
+  const onChangeText = (payload) => setText(payload);
+  const addToDo = () => {
+    if (text === "") {
+      return;
+    }
+    //save to do
+    const newToDos = Object.assign({}, toDos, {
+      [Date.now()]: { text, work: working },
+    });
+    setTodos(newToDos);
+    setText("");
+  };
+  console.log(toDos);
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -37,8 +51,9 @@ export default function App() {
       </View>
       <View>
         <TextInput
+          onSubmitEditing={addToDo}
           onChangeText={onChangeText}
-          placeholderTextColor="blue"
+          placeholderTextColor="grey"
           multiline
           returnKeyType="send"
           keyboardType="email-address"

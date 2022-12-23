@@ -30,6 +30,8 @@ export default function App() {
       { useGoogleMaps: false }
     );
     setCity(location[0].city);
+    console.log(response);
+
     const response = await fetch(
       `https://api.openweathermap.org/data/3.0/onecall?lat=${latitude}&lon=${longitude}&exclude=alert&appid=${API_KEY}&units=metric`
     );

@@ -6,29 +6,30 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
-  AsyncStorage,
 } from "react-native";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { theme } from "./colors";
 import React, { useEffect, useState } from "react";
 const STORAGE_KEY = "@toDos";
+
 export default function App() {
-  const [working, setWorking] = useState(false);
+  const [working, setWorking] = useState(true);
   const [text, setText] = useState("");
   const [toDos, setTodos] = useState({});
   useEffect(() => {
     loadToDos();
-  });
+  }, []);
   const travel = () => setWorking(false);
   const work = () => setWorking(true);
   const onChangeText = (payload) => setText(payload);
   const saveToDos = async (toSave) => {
-    await AsyncStorage.setItem(STORAGE_KEY);
-    console.log(s, JSON.parse(s));
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
+    setTodos(JSON.parse(s));
   };
   const loadToDos = async () => {
     const s = await AsyncStorage.getItem(STORAGE_KEY);
-    console.log(s);
+    console.log(JSON.parse(s));
+    s !== null ? setToDos(JSON.parse(s)) : null;
   };
 
   const addToDo = async () => {
@@ -71,7 +72,9 @@ export default function App() {
           placeholderTextColor="grey"
           returnKeyType="done"
           keyboardType="email-address"
-          placeholder={working ? "Add a ToDo" : "Where do you want to go?"}
+          placeholder={
+            working ? "What do you have to do?" : "Where do you want to go?"
+          }
           style={styles.input}
         />
       </View>

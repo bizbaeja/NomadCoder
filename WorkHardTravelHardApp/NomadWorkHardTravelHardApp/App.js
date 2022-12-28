@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  Alert,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { theme } from "./colors";
@@ -39,10 +40,26 @@ export default function App() {
     //save to do
     const newToDos = { ...toDos, [Date.now()]: { text, working } };
     setTodos(newToDos);
-    await saveToDos(newToDos);
     setText("");
+    await saveToDos(newToDos);
   };
   console.log(toDos);
+  const deleteToDo = async (key) => {
+    Alert.alert("Delete To DO?", "Are you sure?", [
+      { text: "cancel" },
+      {
+        text: "I'm Sure",
+        style: "destructive",
+        onPress: async () => {
+          const newToDos = { ...toDos };
+          delete newToDos[key];
+          setTodos(newToDos);
+          await saveToDos(newToDos);
+        },
+      },
+    ]);
+    return;
+  };
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -83,6 +100,9 @@ export default function App() {
           toDos[key].working === working ? (
             <View style={styles.toDo} key={key}>
               <Text style={styles.toDoText}>{toDos[key].text}</Text>
+              <TouchableOpacity onPress={() => deleteToDo(key)}>
+                <Text>❌</Text>
+              </TouchableOpacity>
             </View>
           ) : null
         )}
@@ -122,6 +142,9 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 20,
     borderRadius: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 
   toDoText: { color: "white" },

@@ -68,7 +68,7 @@ export default function App() {
           <Text
             style={{ ...styles.btnText, color: working ? "white" : theme.grey }}
           >
-            Work
+            할일
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={travel}>
@@ -78,7 +78,7 @@ export default function App() {
               color: !working ? "white" : theme.grey,
             }}
           >
-            Travel
+            취미
           </Text>
         </TouchableOpacity>
       </View>
